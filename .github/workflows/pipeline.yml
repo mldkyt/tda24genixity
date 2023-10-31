@@ -23,6 +23,6 @@ jobs:
       - name: Upload to TdA
         uses: Tour-de-App/upload-app@tda-24
         with:
-          team_secret: f31f96940b198f208876d585da4c82da
+          team_secret: ${{ secrets.TEAM_SECRET }}
           image_name: genixity
           image_path: /tmp/genixity.tar
