@@ -1,0 +1,28 @@
+name: Build and push to TdA
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: ./
+          tags: genixity:latest
+          outputs: type=docker,dest=/tmp/genixity.tar
+
+      - name: Upload to TdA
+        uses: Tour-de-App/upload-app@tda-24
+        with:
+          team_secret: f31f96940b198f208876d585da4c82da
+          image_name: genixity
+          image_path: /tmp/genixity.tar
