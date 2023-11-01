@@ -12,4 +12,5 @@ COPY jsconfig.json /app/jsconfig.json
 COPY next.config.js /app/next.config.js
 RUN npm install
 RUN npm run build
+EXPOSE 80
 ENTRYPOINT [ "npm", "run", "start" ]
