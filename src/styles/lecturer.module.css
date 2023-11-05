@@ -1,0 +1,17 @@
+.tagbutton {
+    margin-left: 0.5em;
+    cursor: pointer;
+}
+
+.tag {
+    margin-left: 0.5em;
+}
+
+.contact {
+    margin-right: 0.3em;
+}
+
+.fullname {
+    font-size: 2em;
+    margin-left: 0.5em;
+}

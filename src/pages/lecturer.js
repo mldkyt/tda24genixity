@@ -1,10 +1,18 @@
 import Head from "next/head";
 import { Badge, Image } from "react-bootstrap";
-import { Bookmark, CashStack, Envelope, GeoAlt, InfoCircle, Telephone } from "react-bootstrap-icons";
+import {
+  Bookmark,
+  CashStack,
+  Envelope,
+  GeoAlt,
+  InfoCircle,
+  Telephone,
+} from "react-bootstrap-icons";
 import Container from "react-bootstrap/Container";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import FinalNavBar from "@/components/NavBar";
+import styles from "@/styles/lecturer.module.css";
 
 /*
 {
@@ -136,7 +144,56 @@ function formatBio(str) {
 
 export default function LecturerTest(props) {
   const fullName = `${props.lecturer.title_before} ${props.lecturer.first_name} ${props.lecturer.middle_name} ${props.lecturer.last_name} ${props.lecturer.title_after}`;
-  const [showAllTags, setShowAllTags] = useState(false);
+  const [_showAllTags, _setShowAllTags] = useState(false);
+
+  const hideAllTags = () => {
+    _setShowAllTags(false);
+  };
+
+  const showAllTags = () => {
+    _setShowAllTags(true);
+  };
+
+  const formatTags = (tags, showAll) => {
+    return (
+      <>
+        {props.lecturer.tags.map((tag, index) => {
+          if (!_showAllTags && index == 2) {
+            return (
+              <>
+                <Badge key={tag.uuid} bg="secondary" className={styles.tag}>
+                  {tag.name}
+                </Badge>
+                <Badge
+                  key="showAllTags"
+                  className={styles.tagbutton}
+                  onClick={showAllTags}
+                >
+                  Zobrazit všechny
+                </Badge>
+              </>
+            );
+          }
+          if (!_showAllTags && index > 2) return null;
+          return (
+            <Badge key={tag.uuid} bg="secondary" className={styles.tag}>
+              {tag.name}
+            </Badge>
+          );
+        })}
+        {_showAllTags && (
+          <Badge
+            key="hideAllTags"
+            className={styles.tagbutton}
+            bg="primary"
+            onClick={hideAllTags}
+          >
+            Skrýt
+          </Badge>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
@@ -146,8 +203,6 @@ export default function LecturerTest(props) {
 
       <Container>
         <FinalNavBar />
-        <br />
-        <br />
         <Image
           roundedCircle
           width={64}
@@ -155,7 +210,7 @@ export default function LecturerTest(props) {
           src={props.lecturer.picture_url}
           alt={`Obrázek lektora ${fullName}`}
         />
-        <span style={{ fontSize: "2em", marginLeft: "0.5em" }}>{fullName}</span>
+        <span className={styles.fullname}>{fullName}</span>
         <br />
         <br />
         <span>
@@ -171,61 +226,26 @@ export default function LecturerTest(props) {
         </span>
         <div>
           <Bookmark />
-          {props.lecturer.tags.map((tag, index) => {
-            if (!showAllTags && index == 2) {
-              return (
-                <>
-                  <Badge
-                    key={tag.uuid}
-                    bg="secondary"
-                    style={{ marginLeft: "0.5em" }}
-                  >
-                    {tag.name}
-                  </Badge>
-                  <Badge
-                    key="showAllTags"
-                    style={{ marginLeft: "0.5em", cursor: "pointer" }}
-                    onClick={() => setShowAllTags(true)}
-                  >
-                    Zobrazit všechny
-                  </Badge>
-                </>
-              );
-            }
-            if (!showAllTags && index > 2) return null;
-            return (
-              <Badge
-                key={tag.uuid}
-                bg="secondary"
-                style={{ marginLeft: "0.5em" }}
-              >
-                {tag.name}
-              </Badge>
-            );
-          })}
-          {showAllTags && (
-            <Badge
-              key="hideAllTags"
-              style={{ marginLeft: "0.5em", cursor: "pointer" }}
-              bg="primary"
-              onClick={() => setShowAllTags(false)}
-            >
-              Skrýt
-            </Badge>
-          )}
+          {formatTags(props.lecturer.tags, _showAllTags)}
         </div>
 
-        <h3 style={{marginTop: '1em'}}>O mně</h3>
+        <h3 style={{ marginTop: "1em" }}>O mně</h3>
         <Markdown>{formatBio(props.lecturer.bio)}</Markdown>
         <h3>Kontakt</h3>
         <p>
           {props.lecturer.contact.telephone_numbers.map((number) => (
-            <a href={`tel:${number}`}><Telephone style={{marginRight: '0.3em'}} />{number}</a>
+            <a href={`tel:${number}`}>
+              <Telephone className={styles.contact} />
+              {number}
+            </a>
           ))}
         </p>
         <p>
           {props.lecturer.contact.emails.map((email) => (
-            <a style={{marginRight: '1em'}} href={`mailto:${email}`}><Envelope style={{marginRight: '0.3em'}}/>{email}</a>
+            <a style={{ marginRight: "1em" }} href={`mailto:${email}`}>
+              <Envelope className={styles.contact} />
+              {email}
+            </a>
           ))}
         </p>
       </Container>
