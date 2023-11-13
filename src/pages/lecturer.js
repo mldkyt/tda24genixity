@@ -12,7 +12,7 @@ import Container from "react-bootstrap/Container";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import FinalNavBar from "@/components/NavBar";
-import styles from "@/styles/Lecturer.module.css";
+import styles from "@/styles/lecturer.module.css";
 import { motion } from "framer-motion";
 
 export async function getServerSideProps(ctx) {
