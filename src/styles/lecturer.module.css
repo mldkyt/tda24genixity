@@ -1,0 +1,161 @@
+.card {
+    background: linear-gradient(145deg, #2a2e33, #23272b);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+    color: #e9ecef;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.75);
+    background: linear-gradient(145deg, #23272b, #2a2e33);
+}
+
+.profileImage {
+    max-width: 150px;
+    margin-bottom: 20px;
+    border: 5px solid #33373d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.fullName {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.claim {
+    font-size: 1.2rem;
+    color: #adb5bd;
+    margin-bottom: 20px;
+}
+
+.infoSection p {
+    display: flex;
+    align-items: center;
+    color: #adb5bd;
+}
+
+.infoSection p svg {
+    margin-right: 10px;
+    fill: #0d6efd;
+}
+
+.infoSection p svg:hover {
+    fill: #0b5ed7;
+}
+
+.tagContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tag,
+.tagbutton {
+    display: inline-block;
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.bioSection h2 {
+    color: #f8f9fa;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    margin-top: 15px;
+}
+
+.tagbutton {
+    margin-left: 0.5em;
+    cursor: pointer;
+    fill: #0d6efd;
+}
+
+.tag {
+    margin-left: 0.5em;
+}
+
+.cardHeader {
+    padding-left: 15px;
+    margin-bottom: 15px;
+    border-radius: 20px 20px 0 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.listGroupItem {
+    background: linear-gradient(145deg, #33373d, #2c3036);
+    border-color: #33373d;
+    border-radius: 20px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    color: #e9ecef;
+}
+
+.listGroupItem:hover {
+    background: linear-gradient(145deg, #2c3036, #33373d);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.listGroupItem:first-child {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.listGroupItem:last-child {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-bottom: 0;
+}
+
+.link {
+    color: #0d6efd;
+    text-decoration: none;
+    margin-left: 0.8em;
+}
+
+.link:hover {
+    text-decoration: underline;
+    color: #0b5ed7;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .card {
+        padding: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 7px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .profileImage {
+        max-width: 120px;
+    }
+
+    .fullName {
+        font-size: 2.2rem;
+    }
+
+    .claim, .infoSection p, .tag, .tagbutton {
+        font-size: 0.7rem;
+    }
+
+    .bioSection h2 {
+        font-size: 1.5rem;
+    }
+
+    .tagContainer, .infoSection {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .listGroupItem {
+        padding: 9px 12px;
+    }
+}
