@@ -1,21 +1,16 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import { Badge, Image, Row, Col, Card, ListGroup } from "react-bootstrap";
-import {
-  Bookmark,
-  CashStack,
-  Envelope,
-  GeoAlt,
-  Telephone,
-} from "react-bootstrap-icons";
-import Container from "react-bootstrap/Container";
+import { useState } from "react";
+import { Row, Col, ListGroup, Badge, Image, Container, Card } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import FinalNavBar from "@/components/NavBar";
 import styles from "@/styles/lecturer.module.css";
+import { GetServerSidePropsContext } from "next";
+import React from "react";
 import { motion } from "framer-motion";
+import FinalNavBar from "../components/NavBar";
+import Head from "next/head";
+import { Bookmark, CashStack, Envelope, GeoAlt, Telephone } from "react-bootstrap-icons";
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   return {
     props: {
       lecturer: {
@@ -76,7 +71,7 @@ export async function getServerSideProps(ctx) {
 
 const tagsAnimationDuration = 500;
 
-export default function LecturerTest(props) {
+export default function LecturerTest(props: { lecturer: Lecturer }) {
   const fullName = `${props.lecturer.title_before} ${props.lecturer.first_name} ${props.lecturer.middle_name} ${props.lecturer.last_name} ${props.lecturer.title_after}`;
   const [_showAllTags, _setShowAllTags] = useState(false);
 
@@ -98,7 +93,7 @@ export default function LecturerTest(props) {
   const formatTags = () => {
     return (
       <>
-        {props.lecturer.tags.map((tag, index) => {
+        {props.lecturer.tags.map((tag: Tag, index: number) => {
           if (index < 2) {
             return (
               <Badge key={tag.uuid} bg="secondary" className={styles.tag}>
@@ -113,8 +108,8 @@ export default function LecturerTest(props) {
               animate={_tagsAnimation}
               variants={{
                 hidden: { scale: 0, width: "0", position: "absolute" },
-                hiding: { scale: 0, width: "0", position: "" },
-                shown: { scale: 1, width: "auto", position: "" },
+                hiding: { scale: 0, width: "0" },
+                shown: { scale: 1, width: "auto" },
               }}
               transition={{
                 duration: tagsAnimationDuration / 1000,
