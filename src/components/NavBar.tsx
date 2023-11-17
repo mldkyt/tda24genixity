@@ -1,5 +1,5 @@
 import { Navbar, Nav, Image, Container } from "react-bootstrap";
-
+import React from "react";
 export default function FinalNavBar() {
     return (
         <Navbar expand="lg">
