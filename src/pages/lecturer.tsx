@@ -1,14 +1,28 @@
 import { useState } from "react";
-import { Row, Col, ListGroup, Badge, Image, Container, Card } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ListGroup,
+  Badge,
+  Image,
+  Container,
+  Card,
+} from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import styles from "@/styles/lecturer.module.css";
+import styles from "../styles/lecturer.module.css";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import { motion } from "framer-motion";
 import FinalNavBar from "../components/NavBar";
 import Head from "next/head";
-import { Bookmark, CashStack, Envelope, GeoAlt, Telephone } from "react-bootstrap-icons";
+import {
+  Bookmark,
+  CashStack,
+  Envelope,
+  GeoAlt,
+  Telephone,
+} from "react-bootstrap-icons";
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   return {
