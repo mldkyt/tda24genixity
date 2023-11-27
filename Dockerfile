@@ -13,4 +13,5 @@ COPY next.config.js /app/next.config.js
 RUN npm install
 RUN npm run build
 EXPOSE 80
+VOLUME [ "/app/data" ]
 ENTRYPOINT [ "npm", "run", "start" ]
