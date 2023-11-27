@@ -1,18 +1,17 @@
-
 interface Lecturer {
     uuid: string;
-    title_before: string;
+    title_before: string | undefined;
     first_name: string;
-    middle_name: string;
-    last_name: string;
-    title_after: string;
-    picture_url: string;
-    location: string;
-    claim: string;
-    bio: string;
-    tags: Tag[];
-    price_per_hour: number;
-    contact: Contact;   
+    middle_name: string | undefined;
+    last_name: string | undefined;
+    title_after: string | undefined;
+    picture_url: string | undefined;
+    location: string | undefined;
+    claim: string | undefined;
+    bio: string | undefined;
+    tags: Tag[] | undefined;
+    price_per_hour: number | undefined;
+    contact: Contact | undefined;
 }
 
 interface Tag {
