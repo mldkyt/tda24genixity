@@ -11,6 +11,7 @@ export function addLecturer(data: Partial<Lecturer>): Lecturer | string {
     if (data.first_name.length > 50) {
         return "First name is too long";
     }
+
     if (!data.last_name) {
         return "Last name is required";
     }
@@ -23,21 +24,18 @@ export function addLecturer(data: Partial<Lecturer>): Lecturer | string {
 
     const rebuiltData: Lecturer = {
         uuid: uuidv4(),
-        title_before: data.title_before ?? "",
-        first_name: data.first_name || "",
-        middle_name: data.middle_name ?? "",
-        last_name: data.last_name || "",
-        title_after: data.title_after ?? "",
-        picture_url: data.picture_url ?? "",
-        location: data.location ?? "",
-        claim: data.claim ?? "",
-        bio: data.bio ?? "Uživatel si bio nenastavil",
-        tags: data.tags ?? [],
-        price_per_hour: data.price_per_hour ?? 0,
-        contact: data.contact ?? {
-            telephone_numbers: [],
-            emails: []
-        }
+        title_before: data.title_before,
+        first_name: data.first_name,
+        middle_name: data.middle_name,
+        last_name: data.last_name,
+        title_after: data.title_after,
+        picture_url: data.picture_url,
+        location: data.location,
+        claim: data.claim,
+        bio: data.bio,
+        tags: data.tags,
+        price_per_hour: data.price_per_hour,
+        contact: data.contact
     };
 
     // assign every tag a uuid
