@@ -1,6 +1,7 @@
 FROM alpine:3.18.4
 RUN apk update
 RUN apk add --update nodejs npm
+RUN apk cache clean
 WORKDIR /app
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
