@@ -1,4 +1,4 @@
-import { validateContact, validateExtraKeys, validateTags } from "./lecturers"
+import { validateContact, validateTags } from "./lecturers"
 
 // Phone Number Regex
 
@@ -15,20 +15,6 @@ test('Phone number regex 2/3', () => {
 test('Phone number regex 3/3', () => {
     const regex = /^(\+\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/g
     expect(regex.test('123456789')).toBe(true)
-})
-
-// ValidateExtraKeys
-
-test('checks if validateExtraKeys works if we don\'t give it all the keys', () => {
-    expect(validateExtraKeys({ 'name': 'test'}, ['name', 'age'])).toBe(true)
-})
-
-test('check if validateExtraKeys works if we give it extra keys', () => {
-    expect(validateExtraKeys({ 'name': 'test', 'lastname': 'test'}, ['name', 'age'])).toBe(false)
-})
-
-test('check if validateExtraKeys works if we give it all the keys', () => {
-    expect(validateExtraKeys({ 'name': 'test', 'age': 12}, ['name', 'age'])).toBe(true)
 })
 
 // CheckTags
