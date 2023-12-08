@@ -26,6 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         case 'PUT':
             const data = editLecturer(uuid, req.body);
             if (typeof data == 'string') {
+                console.log("editLecturer", "return", data, "for", uuid)
                 res.status(404).json({
                     code: 404,
                     message: data
