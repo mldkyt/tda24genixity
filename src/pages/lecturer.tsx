@@ -85,7 +85,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
 const tagsAnimationDuration = 500;
 
-export default function LecturerTest(props: { lecturer: Lecturer }) {
+export default function LecturerTest(props: { lecturer: any }) {
   const fullName = `${props.lecturer.title_before} ${props.lecturer.first_name} ${props.lecturer.middle_name} ${props.lecturer.last_name} ${props.lecturer.title_after}`;
   const [_showAllTags, _setShowAllTags] = useState(false);
 
@@ -211,7 +211,7 @@ export default function LecturerTest(props: { lecturer: Lecturer }) {
             <div className={`${styles.card} ${styles.contactCard}`}>
               <Card.Header className={styles.cardHeader}>Kontakt</Card.Header>
               <ListGroup variant="flush">
-                {props.lecturer.contact.telephone_numbers.map((number) => (
+                {props.lecturer.contact.telephone_numbers.map((number: any) => (
                   <ListGroup.Item className={styles.listGroupItem} key={number}>
                     <Telephone />{" "}
                     <a className={styles.link} href={`tel:${number}`}>
@@ -219,7 +219,7 @@ export default function LecturerTest(props: { lecturer: Lecturer }) {
                     </a>
                   </ListGroup.Item>
                 ))}
-                {props.lecturer.contact.emails.map((email) => (
+                {props.lecturer.contact.emails.map((email: any) => (
                   <ListGroup.Item className={styles.listGroupItem} key={email}>
                     <Envelope />{" "}
                     <a className={styles.link} href={`mailto:${email}`}>
