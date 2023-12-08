@@ -2,27 +2,12 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 
 export function addLecturer(data: Lecturer): Lecturer | string {
-    if (!data.first_name) {
+    if (data.first_name === null || data.first_name === undefined) {
         return "First name is required";
     }
-    if (data.first_name.length < 2) {
-        return "First name is too short";
-    }
-    if (data.first_name.length > 50) {
-        return "First name is too long";
-    }
-
-    if (!data.last_name) {
+    if (data.last_name === null || data.last_name === undefined) {
         return "Last name is required";
     }
-    if (data.last_name.length < 2) {
-        return "Last name is too short";
-    }
-    if (data.last_name.length > 50) {
-        return "Last name is too long";
-    }
-
-
 
     // assign every tag a uuid
     if (data.tags) {
@@ -108,29 +93,11 @@ export function editLecturer(uuid: string, newData: Partial<Lecturer>): Lecturer
     if (!fs.existsSync("data/lecturers.json")) fs.writeFileSync("data/lecturers.json", "[]");
 
     const lecturers = JSON.parse(fs.readFileSync("data/lecturers.json").toString()) as Lecturer[];
-    const validKeys = [
-        "title_before",
-        "first_name",
-        "middle_name",
-        "last_name",
-        "title_after",
-        "picture_url",
-        "location",
-        "claim",
-        "bio",
-        "tags",
-        "price_per_hour",
-        "contact",
-        "uuid"
-    ];
-    if (!validateExtraKeys(newData, validKeys)) {
-        return "Remove extra keys from your request";
-    }
     const index = lecturers.findIndex((element) => element.uuid == uuid);
     if (index == -1) {
         return "This lecturer doesn't exist";
     }
-    for (const key of validKeys) {
+    for (const key of Object.keys(newData)) {
         if (newData[key as keyof Lecturer]) {
             if (key == "tags") {
                 if (!validateTags(newData.tags || [])) {
