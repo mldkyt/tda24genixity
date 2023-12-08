@@ -85,7 +85,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
 const tagsAnimationDuration = 500;
 
-export default function LecturerTest(props: { lecturer: Lecturer }) {
+export default function LecturerTest(props: { lecturer: Required<Lecturer> }) {
   const fullName = `${props.lecturer.title_before} ${props.lecturer.first_name} ${props.lecturer.middle_name} ${props.lecturer.last_name} ${props.lecturer.title_after}`;
   const [_showAllTags, _setShowAllTags] = useState(false);
 

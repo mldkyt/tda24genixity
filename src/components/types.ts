@@ -1,5 +1,5 @@
 interface Lecturer {
-    uuid: string;
+    uuid: string | undefined;
     title_before: string | undefined;
     first_name: string;
     middle_name: string | undefined;
