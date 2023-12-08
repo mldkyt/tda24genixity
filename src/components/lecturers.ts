@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 
-export function addLecturer(data: Partial<Lecturer>): Lecturer | string {
+export function addLecturer(data: Lecturer): Lecturer | string {
     if (!data.first_name) {
         return "First name is required";
     }
@@ -22,21 +22,7 @@ export function addLecturer(data: Partial<Lecturer>): Lecturer | string {
         return "Last name is too long";
     }
 
-    const rebuiltData: Lecturer = {
-        uuid: uuidv4(),
-        title_before: data.title_before,
-        first_name: data.first_name,
-        middle_name: data.middle_name,
-        last_name: data.last_name,
-        title_after: data.title_after,
-        picture_url: data.picture_url,
-        location: data.location,
-        claim: data.claim,
-        bio: data.bio,
-        tags: data.tags,
-        price_per_hour: data.price_per_hour,
-        contact: data.contact
-    };
+
 
     // assign every tag a uuid
     if (data.tags) {
@@ -56,13 +42,15 @@ export function addLecturer(data: Partial<Lecturer>): Lecturer | string {
         }
     }
 
+    data.uuid = uuidv4()
+
     // create data folder if it doesn't exist
     if (!fs.existsSync("data")) fs.mkdirSync("data");
     if (!fs.existsSync("data/lecturers.json")) fs.writeFileSync("data/lecturers.json", "[]");
     let file = JSON.parse(fs.readFileSync("data/lecturers.json").toString());
-    file.push(rebuiltData);
+    file.push(data);
     fs.writeFileSync("data/lecturers.json", JSON.stringify(file));
-    return rebuiltData;
+    return data;
 }
 
 export function getLecturers() {
@@ -110,7 +98,7 @@ export function validateContact(contact: Partial<Contact>) {
 
 export function validateExtraKeys(data: { [key: string]: any }, keys: string[]): boolean {
     for (const element in data) {
-        if (!keys.includes(element)) return false;
+        if (!keys.includes(element.toLowerCase())) return false;
     }
 
     return true;
@@ -132,7 +120,8 @@ export function editLecturer(uuid: string, newData: Partial<Lecturer>): Lecturer
         "bio",
         "tags",
         "price_per_hour",
-        "contact"
+        "contact",
+        "uuid"
     ];
     if (!validateExtraKeys(newData, validKeys)) {
         return "Remove extra keys from your request";
@@ -160,6 +149,7 @@ export function editLecturer(uuid: string, newData: Partial<Lecturer>): Lecturer
                     return `Contact information is invalid`;
                 }
             }
+
             lecturers[index][key as keyof Lecturer] = newData[key as keyof Lecturer] as never;
         }
     }
