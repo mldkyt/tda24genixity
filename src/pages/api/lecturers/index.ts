@@ -1,5 +1,6 @@
 import { addLecturer, getLecturers } from "../../../components/lecturers";
 import { NextApiRequest, NextApiResponse } from "next";
+import { debug } from '../../../components/debugger'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
