@@ -62,31 +62,7 @@ export function validateTags(tags: Partial<Tag>[]) {
 export function validateContact(contact: Partial<Contact>) {
     if (!contact) return false;
     if (!Array.isArray(contact.emails)) return false;
-    if (!Array.isArray(contact.telephone_numbers)) return false;
-    // validate emails using regex
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    for (const element of contact.emails) {
-        if (!emailRegex.test(element)) {
-            return false;
-        }
-    }
-
-    // validate telephone numbers using regex
-    const telephoneRegex = /^(\+\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/g;
-    for (const element of contact.telephone_numbers) {
-        if (!telephoneRegex.test(element)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-export function validateExtraKeys(data: { [key: string]: any }, keys: string[]): boolean {
-    for (const element in data) {
-        if (!keys.includes(element.toLowerCase())) return false;
-    }
-
-    return true;
+    return Array.isArray(contact.telephone_numbers);
 }
 
 export function editLecturer(uuid: string, newData: Partial<Lecturer>): Lecturer | string {
