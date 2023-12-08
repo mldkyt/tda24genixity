@@ -1,5 +1,6 @@
 import { deleteLecturer, editLecturer, getLecturer } from "../../../components/lecturers";
 import { NextApiRequest, NextApiResponse } from "next";
+import { debug } from "../../../components/debugger";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const uuid = req.query.uuid as string | undefined;
