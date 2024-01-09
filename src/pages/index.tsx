@@ -16,6 +16,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
   const lecturers = getLecturers();
 
   let validTags: string[] = [];
+  let validLocations: string[] = [];
   lecturers.forEach(x => {
     if (x.tags) {
       x.tags.forEach(x => {
@@ -24,23 +25,29 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         }
       })
     }
+
+    if (x.location && !validLocations.includes(x.location)) {
+      validLocations.push(x.location);
+    }
   })
 
   return {
     props: {
       lecturers,
-      validTags
+      validTags,
+      validLocations
     }
   }
 }
 
 
-export default function Home(props: { lecturers: Lecturer[], validTags: string[] }) {
+export default function Home(props: { lecturers: Lecturer[], validTags: string[], validLocations: string[] }) {
 
   const [filterMenu, setFilterMenu] = useState(false);
 
   const [filterPrice, setFilterPrice] = useState({ enabled: false, min: 0, max: 0 });
   const [filterTags, setFilterTags] = useState({ enabled: false, tags: [] } as { enabled: boolean, tags: string[] });
+  const [filterLocation, setFilterLocation] = useState({ enabled: false, locations: [] } as { enabled: boolean, locations: string[] });
 
   return (
     <main className={inter.className}>
@@ -67,9 +74,18 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
               }
 
               if (filterTags.enabled && x.tags != undefined) {
-                let passed = true;
-                x.tags.forEach(y => {
-                  if (!filterTags.tags.includes(y.name)) {
+                let passed = filterTags.tags.length > 0;
+                filterTags.tags.forEach(y => {
+                  if (!x.tags?.map(x => x.name).includes(y)) {
+                    passed = false;
+                  }
+                });
+                if (!passed) return null
+              }
+              if (filterLocation.enabled && x.tags != undefined) {
+                let passed = filterLocation.locations.length > 0;
+                filterLocation.locations.forEach(y => {
+                  if (x.location != y) {
                     passed = false;
                   }
                 });
@@ -136,6 +152,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
             <FormControl type='number' min={0} value={filterPrice.max} onChange={x => setFilterPrice({ ...filterPrice, max: Number(x.currentTarget.value) })}></FormControl>
 
             <h2>Štítky</h2>
+            <Form.Check type='switch' checked={filterTags.enabled} onChange={x => setFilterTags({ ...filterTags, enabled: x.currentTarget.checked })} label="Zapnout filtr"></Form.Check>
             {filterTags.tags.map(x => {
               function remove() {
                 let newTags: string[] = [];
@@ -152,6 +169,30 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
               <option></option>
               {props.validTags.map(x => {
                 if (filterTags.tags.includes(x)) {
+                  return null
+                }
+                return <option value={x}>{x}</option>
+              })}
+            </Form.Select>
+
+            <h2>Lokalita</h2>
+            <Form.Check type='switch' checked={filterLocation.enabled} onChange={x => setFilterLocation({ ...filterLocation, enabled: x.currentTarget.checked })} label="Zapnout filtr"></Form.Check>
+            {filterLocation.locations.map(x => {
+              function remove() {
+                let newLocations: string[] = [];
+                filterLocation.locations.forEach(y => { if (x != y) newLocations.push(y); });
+                setFilterLocation({ ...filterLocation, locations: newLocations });
+              }
+
+              return <Badge bg='secondary'>
+                <X onClick={remove} style={{ cursor: 'pointer' }} /> <GeoAlt /> {x}
+              </Badge>
+            })}
+            <p></p>
+            <Form.Select value={""} onChange={x => setFilterLocation({ ...filterLocation, locations: [...filterLocation.locations, x.currentTarget.value] })}>
+              <option></option>
+              {props.validLocations.map(x => {
+                if (filterLocation.locations.includes(x)) {
                   return null
                 }
                 return <option value={x}>{x}</option>
