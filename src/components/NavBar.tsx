@@ -5,7 +5,10 @@ export default function FinalNavBar() {
         <Navbar expand="lg">
             <Container>
                 <Navbar.Brand>
-                    <Image width={64} src="/Logo.png"></Image>
+                    <Image width={64} src="/Logo.svg"></Image>
+                    <span style={{
+                        marginLeft: '1em'
+                    }}>Teacher digital Agency</span>
                 </Navbar.Brand>
 
                 {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
