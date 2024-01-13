@@ -104,15 +104,27 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
                   marginBottom: '1em',
                   boxShadow: '5px 5px 5px #1a1a1a'
                 }}>
-                  {x.picture_url && <img src={x.picture_url} alt={`Profile picture for ${fullName}`} width={64} style={{
-                    padding: '0.3em',
-                    borderRadius: '100%'
-                  }}></img>}
-                  <span style={{
-                    fontWeight: 'bold',
-                    marginLeft: '1em'
-                  }}>{fullName}</span>
-                  <p>
+                  <div style={{
+                    float: 'left',
+                    width: '120px',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}>
+                    {x.picture_url && <img src={x.picture_url} alt={`Profile picture for ${fullName}`} width={96} style={{
+                      padding: '0.3em',
+                      borderRadius: '100%',
+                      left: '50%',
+                      position: 'relative',
+                      transform: 'translateX(-50%)'
+                    }}></img>}
+                    <span style={{
+                      fontWeight: 'bold',
+                      marginLeft: '1em'
+                    }}>{fullName}</span>
+                  </div>
+                  <p style={{
+                    fontWeight: 'bold'
+                  }}>
                     {x.claim}
                   </p>
                   <p>
@@ -166,7 +178,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
             })}
             <p></p>
             <Form.Select value={""} onChange={x => setFilterTags({ ...filterTags, tags: [...filterTags.tags, x.currentTarget.value] })}>
-              <option></option>
+              <option>Vybrat štítek pro přidání</option>
               {props.validTags.map(x => {
                 if (filterTags.tags.includes(x)) {
                   return null
@@ -190,7 +202,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
             })}
             <p></p>
             <Form.Select value={""} onChange={x => setFilterLocation({ ...filterLocation, locations: [...filterLocation.locations, x.currentTarget.value] })}>
-              <option></option>
+              <option>Vybrat lokalitu pro přidání</option>
               {props.validLocations.map(x => {
                 if (filterLocation.locations.includes(x)) {
                   return null
