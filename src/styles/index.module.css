@@ -1,0 +1,40 @@
+
+.lecturerbox {
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 4px;
+    margin-bottom: 1em;
+    box-shadow: 5px 5px 5px #1a1a1a;
+}
+
+.lecturerimagediv {
+    float: left;
+    width: 128px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.lecturerbadges {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lecturerbadge {
+    margin: 0.1em;
+}
+
+.lecturername {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.lecturerimage {
+    margin: 0.3em;
+    border-radius: 100%;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    border: 5px solid black;
+    box-shadow: 5px 5px 5px #1a1a1a;
+}

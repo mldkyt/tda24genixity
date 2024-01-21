@@ -5,11 +5,7 @@ import { GetServerSidePropsContext } from 'next'
 import { Badge, Button, CloseButton, Container, Form, FormControl, Modal } from 'react-bootstrap'
 import { getLecturers } from '../components/lecturers'
 import { GeoAlt, CashStack, X } from 'react-bootstrap-icons';
-
-
-
-const inter = Inter({ subsets: ['latin'] })
-
+import styles from '../styles/index.module.css'
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 
@@ -41,7 +37,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
 }
 
 
-export default function Home(props: { lecturers: Lecturer[], validTags: string[], validLocations: string[] }) {
+export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags: string[], validLocations: string[] }>) {
 
   const [filterMenu, setFilterMenu] = useState(false);
 
@@ -49,8 +45,75 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
   const [filterTags, setFilterTags] = useState({ enabled: false, tags: [] } as { enabled: boolean, tags: string[] });
   const [filterLocation, setFilterLocation] = useState({ enabled: false, locations: [] } as { enabled: boolean, locations: string[] });
 
+  const [pageExtend, setPageExtend] = useState(0);
+
+
+  function renderLecturers() {
+    let i = 0;
+    return props.lecturers.map(x => {
+      if (i > pageExtend * 10 + 10) {
+        return null;
+      }
+      i++;
+
+      if (filterPrice.enabled && x.price_per_hour != undefined) {
+        if (filterPrice.min != 0 && x.price_per_hour < filterPrice.min) {
+          return null;
+        }
+        if (filterPrice.max != 0 && x.price_per_hour > filterPrice.max) {
+          return null;
+        }
+      }
+
+      if (filterTags.enabled && x.tags != undefined) {
+        let passed = filterTags.tags.length > 0;
+        filterTags.tags.forEach(y => {
+          if (!x.tags?.map(x => x.name).includes(y)) {
+            passed = false;
+          }
+        });
+        if (!passed) return null
+      }
+      if (filterLocation.enabled && x.tags != undefined) {
+        let passed = filterLocation.locations.length > 0;
+        filterLocation.locations.forEach(y => {
+          if (x.location != y) {
+            passed = false;
+          }
+        });
+        if (!passed) return null
+      }
+
+      const fullName = `${x.title_before ?? ""} ${x.first_name} ${x.middle_name ?? ""} ${x.last_name} ${x.title_after ?? ""}`;
+      return <a href={`/lecturer/${x.uuid}`} key={x.uuid} style={{
+        textDecoration: 'none',
+        color: 'inherit'
+      }}>
+        <div key={x.uuid} className={styles.lecturerbox}>
+          <div className={styles.lecturerimagediv}>
+            {x.picture_url && <img src={x.picture_url} alt={fullName} width={96} className={styles.lecturerimage}></img>}
+          </div>
+          <span className={styles.lecturername}>{fullName}</span>
+          <p>
+            {x.claim}
+          </p>
+          <p>
+            {x.location && <><GeoAlt /> {x.location}</>} {x.price_per_hour && <><CashStack /> {x.price_per_hour} kč/h</>}
+          </p>
+          <p className={styles.lecturerbadges}>
+            {x.tags?.map(x => {
+              return <Badge key={x.uuid} bg='secondary' className={styles.lecturerbadge}>
+                {x.name}
+              </Badge>
+            })}
+          </p>
+        </div>
+      </a>
+    })
+  }
+
   return (
-    <main className={inter.className}>
+    <main>
       <NavBar />
       <Container>
         <div style={{
@@ -62,90 +125,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
           marginBottom: '4px'
         }}>Filtry...</Button>
         <div>
-          {
-            props.lecturers.map(x => {
-              if (filterPrice.enabled && x.price_per_hour != undefined) {
-                if (filterPrice.min != 0 && x.price_per_hour < filterPrice.min) {
-                  return null;
-                }
-                if (filterPrice.max != 0 && x.price_per_hour > filterPrice.max) {
-                  return null;
-                }
-              }
-
-              if (filterTags.enabled && x.tags != undefined) {
-                let passed = filterTags.tags.length > 0;
-                filterTags.tags.forEach(y => {
-                  if (!x.tags?.map(x => x.name).includes(y)) {
-                    passed = false;
-                  }
-                });
-                if (!passed) return null
-              }
-              if (filterLocation.enabled && x.tags != undefined) {
-                let passed = filterLocation.locations.length > 0;
-                filterLocation.locations.forEach(y => {
-                  if (x.location != y) {
-                    passed = false;
-                  }
-                });
-                if (!passed) return null
-              }
-
-              const fullName = `${x.title_before ?? ""} ${x.first_name} ${x.middle_name ?? ""} ${x.last_name} ${x.title_after ?? ""}`;
-              return <a href={`/lecturer/${x.uuid}`} style={{
-                textDecoration: 'none',
-                color: 'inherit'
-              }}>
-                <div key={x.uuid} style={{
-                  border: '1px solid grey',
-                  borderRadius: '5px',
-                  padding: '4px',
-                  marginBottom: '1em',
-                  boxShadow: '5px 5px 5px #1a1a1a'
-                }}>
-                  <div style={{
-                    float: 'left',
-                    width: '120px',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}>
-                    {x.picture_url && <img src={x.picture_url} alt={`Profile picture for ${fullName}`} width={96} style={{
-                      padding: '0.3em',
-                      borderRadius: '100%',
-                      left: '50%',
-                      position: 'relative',
-                      transform: 'translateX(-50%)'
-                    }}></img>}
-                    <span style={{
-                      fontWeight: 'bold',
-                      marginLeft: '1em'
-                    }}>{fullName}</span>
-                  </div>
-                  <p style={{
-                    fontWeight: 'bold'
-                  }}>
-                    {x.claim}
-                  </p>
-                  <p>
-                    {x.location && <><GeoAlt /> {x.location}</>} {x.price_per_hour && <><CashStack /> {x.price_per_hour} kč/h</>}
-                  </p>
-                  <p style={{
-                    display: 'flex',
-                    flexWrap: 'wrap'
-                  }}>
-                    {x.tags && x.tags.map(x => {
-                      return <Badge key={x.uuid} bg='secondary' style={{
-                        margin: '0.1em'
-                      }}>
-                        {x.name}
-                      </Badge>
-                    })}
-                  </p>
-                </div>
-              </a>
-            })
-          }
+          {renderLecturers()}
         </div>
 
         <Modal show={filterMenu} onHide={() => setFilterMenu(false)}>
@@ -172,7 +152,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
                 setFilterTags({ ...filterTags, tags: newTags });
               }
 
-              return <Badge bg='secondary'>
+              return <Badge bg='secondary' key={x}>
                 <X onClick={remove} style={{ cursor: 'pointer' }} /> {x}
               </Badge>
             })}
@@ -183,7 +163,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
                 if (filterTags.tags.includes(x)) {
                   return null
                 }
-                return <option value={x}>{x}</option>
+                return <option key={x} value={x}>{x}</option>
               })}
             </Form.Select>
 
@@ -196,7 +176,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
                 setFilterLocation({ ...filterLocation, locations: newLocations });
               }
 
-              return <Badge bg='secondary'>
+              return <Badge bg='secondary' key={x}>
                 <X onClick={remove} style={{ cursor: 'pointer' }} /> <GeoAlt /> {x}
               </Badge>
             })}
@@ -207,7 +187,7 @@ export default function Home(props: { lecturers: Lecturer[], validTags: string[]
                 if (filterLocation.locations.includes(x)) {
                   return null
                 }
-                return <option value={x}>{x}</option>
+                return <option value={x} key={x}>{x}</option>
               })}
             </Form.Select>
           </Modal.Body>
