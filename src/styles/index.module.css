@@ -1,0 +1,55 @@
+
+.lecturerbox {
+    padding: 4px;
+    margin-bottom: 1em;
+    background: linear-gradient(93.01deg, #272727 0%, #353535 31.78%, #323232 66.4%, #262626 100%);
+    box-shadow: 1px 3px 7.9px 1px rgba(0, 0, 0, 0.32);
+    border-radius: 6px;
+}
+
+.lecturerimagediv {
+    float: left;
+    width: 128px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.lecturerbadges {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lecturerbadge {
+    margin: 0.1em;
+}
+
+.lecturername {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 18px;
+}
+
+.lecturerimage {
+    margin: 0.3em;
+    border-radius: 100%;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    border: 5px solid black;
+    max-height: 128px;
+    background: #707070;
+    box-shadow: 2px 2px 1.1px rgba(0, 0, 0, 0.44);
+}
+
+.lecturerclaim {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.sortbydropdown {
+    width: 250px;
+}
