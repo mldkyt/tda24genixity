@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google'
 import React, { useState } from 'react'
 import NavBar from '../components/NavBar'
 import { GetServerSidePropsContext } from 'next'
@@ -27,6 +26,9 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     }
   })
 
+  validTags.sort((a, b) => a.localeCompare(b));
+  validLocations.sort((a, b) => a.localeCompare(b));
+
   return {
     props: {
       lecturers,
@@ -41,21 +43,46 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
 
   const [filterMenu, setFilterMenu] = useState(false);
 
+  const [sortBy, setSortBy] = useState('');
+
   const [filterPrice, setFilterPrice] = useState({ enabled: false, min: 0, max: 0 });
   const [filterTags, setFilterTags] = useState({ enabled: false, tags: [] } as { enabled: boolean, tags: string[] });
   const [filterLocation, setFilterLocation] = useState({ enabled: false, locations: [] } as { enabled: boolean, locations: string[] });
 
-  const [pageExtend, setPageExtend] = useState(0);
-
+  const [pageExtend, setPageExtend] = useState(9999);
+  const [showShowMoreBtn, setShowShowMoreBtn] = useState(true);
 
   function renderLecturers() {
     let i = 0;
-    return props.lecturers.map(x => {
-      if (i > pageExtend * 10 + 10) {
-        return null;
-      }
-      i++;
 
+    switch (sortBy) {
+      case "namedesc":
+        props.lecturers.sort((a, b) => {
+          return a.first_name.localeCompare(b.first_name);
+        })
+        break;
+      case "nameasc":
+        props.lecturers.sort((a, b) => {
+          return b.first_name.localeCompare(a.first_name);
+        });
+        break;
+      case "pricedesc":
+        props.lecturers.sort((a, b) => {
+          if (!a.price_per_hour) a.price_per_hour = 0;
+          if (!b.price_per_hour) b.price_per_hour = 0;
+          return a.price_per_hour - b.price_per_hour;
+        });
+        break;
+      case "priceasc":
+        props.lecturers.sort((a, b) => {
+          if (!a.price_per_hour) a.price_per_hour = 0;
+          if (!b.price_per_hour) b.price_per_hour = 0;
+          return b.price_per_hour - a.price_per_hour;
+        });
+        break;
+    }
+
+    const things = props.lecturers.map(x => {
       if (filterPrice.enabled && x.price_per_hour != undefined) {
         if (filterPrice.min != 0 && x.price_per_hour < filterPrice.min) {
           return null;
@@ -84,6 +111,11 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
         if (!passed) return null
       }
 
+      if (i > pageExtend * 10 + 10) {
+        return null;
+      }
+      i++;
+
       const fullName = `${x.title_before ?? ""} ${x.first_name} ${x.middle_name ?? ""} ${x.last_name} ${x.title_after ?? ""}`;
       return <a href={`/lecturer/${x.uuid}`} key={x.uuid} style={{
         textDecoration: 'none',
@@ -94,7 +126,7 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
             {x.picture_url && <img src={x.picture_url} alt={fullName} width={96} className={styles.lecturerimage}></img>}
           </div>
           <span className={styles.lecturername}>{fullName}</span>
-          <p>
+          <p className={styles.lecturerclaim}>
             {x.claim}
           </p>
           <p>
@@ -110,6 +142,13 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
         </div>
       </a>
     })
+
+    const showShowMoreBtnNewState = i > pageExtend * 10 + 10;
+    if (showShowMoreBtnNewState != showShowMoreBtn) {
+      setShowShowMoreBtn(showShowMoreBtnNewState);
+    }
+
+    return things;
   }
 
   return (
@@ -124,8 +163,20 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
         <Button onClick={() => setFilterMenu(true)} style={{
           marginBottom: '4px'
         }}>Filtry...</Button>
+        <Form.Select className={styles.sortbydropdown} placeholder='Seřadit podle...' value={sortBy} onChange={x => setSortBy(x.currentTarget.value)}>
+          <option value="">Seřadit podle...</option>
+          <option value="namedesc">Jméno A-Z</option>
+          <option value="nameasc">Jméno Z-A</option>
+          <option value="pricedesc">Cena ↑</option>
+          <option value="priceasc">Cena ↓</option>
+        </Form.Select>
         <div>
           {renderLecturers()}
+        </div>
+        <div>
+          {showShowMoreBtn && <Button onClick={() => {
+            setPageExtend(pageExtend + 1);
+          }}>Zobrazit další</Button>}
         </div>
 
         <Modal show={filterMenu} onHide={() => setFilterMenu(false)}>
