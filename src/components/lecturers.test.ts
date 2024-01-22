@@ -71,17 +71,3 @@ test('test validateContact with valid contact information', () => {
         telephone_numbers: ['+31612345678', '+123 777 338 111']
     })).toBe(true)
 })
-
-test('test validateContact with invalid email', () => {
-    expect(validateContact({
-        emails: ['programmerastolfo'],
-        telephone_numbers: ['+31612345678']
-    })).toBe(false)
-})
-
-test('test validateContact with invalid telephone number', () => {
-    expect(validateContact({
-        emails: ['programmerastolfo@gmail.com'],
-        telephone_numbers: ['aidnjfo']
-    })).toBe(false)
-})

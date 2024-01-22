@@ -48,8 +48,9 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
   const [filterPrice, setFilterPrice] = useState({ enabled: false, min: 0, max: 0 });
   const [filterTags, setFilterTags] = useState({ enabled: false, tags: [] } as { enabled: boolean, tags: string[] });
   const [filterLocation, setFilterLocation] = useState({ enabled: false, locations: [] } as { enabled: boolean, locations: string[] });
+  const [filterFullText, setFilterFullText] = useState({ enabled: false, search: "" });
 
-  const [pageExtend, setPageExtend] = useState(9999);
+  const [pageExtend, setPageExtend] = useState(0);
   const [showShowMoreBtn, setShowShowMoreBtn] = useState(true);
 
   function renderLecturers() {
@@ -83,6 +84,9 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
     }
 
     const things = props.lecturers.map(x => {
+      if (filterFullText.enabled && !x.first_name.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.last_name?.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.bio?.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.claim?.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.middle_name?.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.title_before?.toLowerCase().includes(filterFullText.search.toLowerCase()) && !x.title_after?.toLowerCase().includes(filterFullText.search.toLowerCase())) {
+        return null;
+      }
       if (filterPrice.enabled && x.price_per_hour != undefined) {
         if (filterPrice.min != 0 && x.price_per_hour < filterPrice.min) {
           return null;
@@ -91,7 +95,6 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
           return null;
         }
       }
-
       if (filterTags.enabled && x.tags != undefined) {
         let passed = filterTags.tags.length > 0;
         filterTags.tags.forEach(y => {
@@ -160,16 +163,18 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
           width: '150px'
         }}>
         </div>
-        <Button onClick={() => setFilterMenu(true)} style={{
-          marginBottom: '4px'
-        }}>Filtry...</Button>
-        <Form.Select className={styles.sortbydropdown} placeholder='Seřadit podle...' value={sortBy} onChange={x => setSortBy(x.currentTarget.value)}>
-          <option value="">Seřadit podle...</option>
-          <option value="namedesc">Jméno A-Z</option>
-          <option value="nameasc">Jméno Z-A</option>
-          <option value="pricedesc">Cena ↑</option>
-          <option value="priceasc">Cena ↓</option>
-        </Form.Select>
+        <div className={styles.searchoptions}>
+          <Button onClick={() => setFilterMenu(true)} style={{
+            marginBottom: '4px'
+          }}>Filtry...</Button>
+          <Form.Select className={styles.sortbydropdown} placeholder='Seřadit podle...' value={sortBy} onChange={x => setSortBy(x.currentTarget.value)}>
+            <option value="">Seřadit podle...</option>
+            <option value="namedesc">Jméno A-Z</option>
+            <option value="nameasc">Jméno Z-A</option>
+            <option value="pricedesc">Cena ↑</option>
+            <option value="priceasc">Cena ↓</option>
+          </Form.Select>
+        </div>
         <div>
           {renderLecturers()}
         </div>
@@ -185,6 +190,11 @@ export default function Home(props: Readonly<{ lecturers: Lecturer[], validTags:
             <CloseButton onClick={() => setFilterMenu(false)} />
           </Modal.Header>
           <Modal.Body>
+            <h2>Text</h2>
+            <Form.Check type='switch' checked={filterFullText.enabled} onChange={x => setFilterFullText({ ...filterFullText, enabled: x.currentTarget.checked })} label="Zapnout filtr"></Form.Check>
+            <p>Hledá ve jméně, claimu a v biu.</p>
+            <FormControl type='text' value={filterFullText.search} onChange={x => setFilterFullText({ ...filterFullText, search: x.currentTarget.value })}></FormControl>
+
             <h2>Cena</h2>
             <Form.Check type='switch' checked={filterPrice.enabled} onChange={x => setFilterPrice({ ...filterPrice, enabled: x.currentTarget.checked })} label="Zapnout filtr"></Form.Check>
 
